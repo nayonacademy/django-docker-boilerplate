@@ -1,0 +1,31 @@
+version: '2'  
+services:  
+  nginx:
+    image: nginx:alpine
+    container_name: nz01
+    ports:
+      - "80:8000"
+    volumes:
+      - ./src:/src
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+  web:
+    build: .
+    container_name: dz01
+    depends_on:
+      - db
+    volumes:
+      - ./src:/src
+    expose:
+      - "8000"
+    links:
+      - redis
+  db:
+    image: postgres:alpine
+    container_name: pz01
+  redis:
+    image: redis:alpine
+    container_name: rz01
+    ports:
+     - '6379:6379'
